@@ -1,5 +1,5 @@
-next [????.??.??]
------------------
+0.6 [2025.06.17]
+----------------
 * Add the `Ersatz.Relation.ARS` module
 * Change the type of `buildFrom`:
 
