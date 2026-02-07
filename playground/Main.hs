@@ -7,10 +7,10 @@ import Control.Monad (replicateM)
 import Prelude hiding ((||), (&&), not)
 
 -- 4-bit addition problem
-additionExample :: IO ()
-additionExample = do
+additionExample :: Integer -> IO ()
+additionExample target = do
   putStrLn "=== Addition Example ==="
-  putStrLn "Finding two 4-bit numbers that add to 23..."
+  putStrLn $ "Finding two 4-bit numbers that add to " ++ show target ++ "..."
   
   (result, mbSolution) <- solveWith minisat $ do
     a <- Bits <$> replicateM 4 exists
@@ -18,7 +18,7 @@ additionExample = do
     
     let sum' = a + b
     
-    assert (sum' === encode (23 :: Integer))
+    assert (sum' === encode target)
     
     return (a, b)
   
@@ -50,6 +50,7 @@ booleanExample = do
 main :: IO ()
 main = do
   putStrLn "Ersatz SAT Solver Playground\n"
-  additionExample
+  additionExample 23
+  additionExample 42
   booleanExample
   putStrLn "\nDone!"
