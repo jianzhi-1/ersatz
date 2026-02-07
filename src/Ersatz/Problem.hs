@@ -278,6 +278,13 @@ wdimacs t = comments <> problem <> clauses
 
     tClauses = wdimacsClauses t
 
+-- | Generate a 'Builder' out of a projection variable set.
+projectionVariables :: [Int] -> Builder
+projectionVariables pv =
+    string7 "c p show "
+    <> mconcat (map (\i -> intDec i <> char7 ' ') pv)
+    <> string7 "0\n"
+
 bComment :: ByteString -> Builder
 bComment bs = bLine [ char7 'c', byteString bs ]
 
@@ -385,3 +392,8 @@ writeQdimacs' path = writeBuilder path . qdimacs
 -- to experiment with solvers, solver options, or measure effects of different encodings.
 writeWdimacs' :: (MonadIO m, WDIMACS t) => FilePath -> t -> m ()
 writeWdimacs' path = writeBuilder path . wdimacs
+
+-- | Write a collection of projection variables to a file at a particular path. Useful
+-- for ApproxMC. For example, if `pv` is [1, 2, 3, 4, 5], writes "c p show 1 2 3 4 5 0"
+writeProjectionSet :: MonadIO m => FilePath -> [Int] -> m ()
+writeProjectionSet path pv = writeBuilder path (projectionVariables pv)
