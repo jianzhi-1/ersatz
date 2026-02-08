@@ -20,7 +20,7 @@ data TestCase = TestCase
 testCases :: [TestCase]
 testCases =
   [ TestCase
-      { testName = "test-3-15-5"
+      { testName = "test-0-v=15-c=5"
       , cnfContent = unlines
           [ "p cnf 15 5"
           , "1 2 0"
@@ -33,7 +33,7 @@ testCases =
       , expectedCount = 576
       }
     , TestCase
-      { testName = "test-1-15-5"
+      { testName = "test-1-v=15-c=5"
       , cnfContent = unlines
           [ "p cnf 15 5"
           , "1 2 0"
@@ -46,7 +46,7 @@ testCases =
       , expectedCount = 18
       }
   , TestCase
-      { testName = "test-2-2-1"
+      { testName = "test-2-v=2-c=1"
       , cnfContent = unlines
           [ "p cnf 2 1"
           , "1 2 0"
