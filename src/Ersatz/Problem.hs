@@ -60,7 +60,7 @@ import qualified Data.List.NonEmpty as NE
 import Ersatz.Internal.Formula
 import Ersatz.Internal.Literal
 import Ersatz.Internal.StableName
-import System.IO ( withFile, IOMode(WriteMode) )
+import System.IO ( withFile, IOMode(WriteMode, AppendMode) )
 import System.IO.Unsafe
 import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
@@ -397,4 +397,6 @@ writeWdimacs' path = writeBuilder path . wdimacs
 -- | Write a collection of projection variables to a file at a particular path. Useful
 -- for ApproxMC. For example, if `pv` is [1, 2, 3, 4, 5], writes "c p show 1 2 3 4 5 0"
 writeProjectionSet :: MonadIO m => FilePath -> [Int] -> m ()
-writeProjectionSet path pv = writeBuilder path (projectionVariables pv)
+writeProjectionSet path pv = liftIO $ do
+  withFile path AppendMode $ \fh ->
+    hPutBuilder fh (projectionVariables pv)
