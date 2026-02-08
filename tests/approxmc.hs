@@ -1,5 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 import Prelude hiding ((||), not)
+import Data.Maybe (mapMaybe)
 import Ersatz
 import Ersatz.Bit
 import Ersatz.Variable (exists)
@@ -13,6 +14,7 @@ import System.Process (readProcessWithExitCode)
 import Ersatz.Solution (CountResult(..))
 import Ersatz.Counter.Common (parseCounter)
 import System.Exit (exitFailure, exitSuccess)
+import Ersatz.Internal.Literal (Literal(..))
 
 data TestCase = TestCase
   { testName :: String
@@ -93,10 +95,10 @@ runTest (TestCase testName cnfContent expectedCount) = do
         putStrLn out
         return False
 
-approxmcInterfaceTest :: IO ()
+approxmcInterfaceTest :: IO Bool
 approxmcInterfaceTest = do
   
-  (_, problem) <- runSAT $ do
+  ((x1, x2, x3, x4, x5, x6, x7, x8, x9, x10), problem) <- runSAT $ do
     (x1 :: Bit) <- exists
     (x2 :: Bit) <- exists
     (x3 :: Bit) <- exists
@@ -118,15 +120,30 @@ approxmcInterfaceTest = do
     assert (x11 || x4 || x5)
     assert ((not x14) || x11)
     assert (x1 || x2 || x3 || x4 || x5 || x6 || x7 || x8 || (not x9) || x10 || x11)
-    return ()
-  
-  result <- approxmc problem [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+    return (x1, x2, x3, x4, x5, x6, x7, x8, x9, x10)
+
+  let getBitVar (Var (Literal n)) = Just (abs n)
+      getBitVar _ = Nothing
+  let bits = [x1, x2, x3, x4, x5, x6, x7, x8, x9, x10]
+  let projectionVars = mapMaybe getBitVar bits
+
+  putStrLn $ "Projection variables: " ++ show projectionVars
+
+  result <- approxmc problem projectionVars
   
   case result of
-    Count n -> 
-      putStrLn $ "Approximate count: " ++ show n ++ " solutions"
-    CountUnsolved -> 
-      putStrLn "Could not count solutions"
+    Count n -> do
+      if n == 576
+        then do
+          putStrLn $ "✓ PASSED: Got expected count of 576"
+          return True
+        else do
+          putStrLn $ "✗ FAILED: Expected 576, got " ++ show n
+          return False
+    CountUnsolved -> do
+      putStrLn "✗ FAILED: Could not count solutions"
+      return False
 
 main :: IO ()
 main = do
@@ -138,8 +155,10 @@ main = do
   putStrLn "\n====================================="
   putStrLn $ "Results: " ++ show passed ++ "/" ++ show total ++ " tests passed"
   putStrLn "====================================="
-  approxmcInterfaceTest
+
+  putStrLn "\n=== ApproxMC Interface Test ==="
+  interfaceTestPassed <- approxmcInterfaceTest
   
-  if passed == total
+  if passed == total Prelude.&& interfaceTestPassed
     then exitSuccess
     else exitFailure
