@@ -7,8 +7,8 @@ module Ersatz.Counter.ApproxMC
 import Control.Monad.IO.Class
 import Ersatz.Counter.Common (parseCounter)
 import Ersatz.Solver.Common (withTempFiles)
-import Ersatz.Problem ( SAT, writeDimacs', writeProjectionSet )
-import Ersatz.Solution (Counter, CountResult)
+import Ersatz.Problem (SAT, writeDimacs', writeProjectionSet)
+import Ersatz.Solution (Counter)
 import System.Process (readProcessWithExitCode)
 
 -- | `Counter` for `SAT` problems that tries to invoke the @approxmc@ executable from the @PATH@
