@@ -218,6 +218,14 @@ library
     Ersatz.Relation.Op
     Ersatz.Relation.ARS
 
+executable ersatz-playground
+  main-is:             Main.hs
+  hs-source-dirs:      playground
+  build-depends:
+      base >=4.14 && <5,
+      ersatz
+  default-language:    Haskell2010
+
 executable ersatz-regexp-grid
   -- description: An example program that solves the regular expression crossword problem <http://www.coinheist.com/rubik/a_regular_crossword/> using Ersatz.
   if flag(examples)
