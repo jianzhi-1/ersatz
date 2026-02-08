@@ -1,6 +1,9 @@
+{-# LANGUAGE ScopedTypeVariables #-}
+import Prelude hiding ((||), not)
 import Ersatz
 import Ersatz.Bit
 import Ersatz.Variable (exists)
+import Ersatz.Counter.ApproxMC (approxmc)
 
 import System.Environment (getArgs)
 import Control.Monad ( forM_, replicateM, unless )
@@ -90,6 +93,43 @@ runTest (TestCase testName cnfContent expectedCount) = do
         putStrLn out
         return False
 
+approxmcInterfaceTest :: IO ()
+approxmcInterfaceTest = do
+  
+  (_, problem) <- runSAT $ do
+    (x1 :: Bit) <- exists
+    (x2 :: Bit) <- exists
+    (x3 :: Bit) <- exists
+    (x4 :: Bit) <- exists
+    (x5 :: Bit) <- exists
+    (x6 :: Bit) <- exists
+    (x7 :: Bit) <- exists
+    (x8 :: Bit) <- exists
+    (x9 :: Bit) <- exists
+    (x10 :: Bit) <- exists
+    (x11 :: Bit) <- exists
+    (x12 :: Bit) <- exists
+    (x13 :: Bit) <- exists
+    (x14 :: Bit) <- exists
+    (x15 :: Bit) <- exists
+    
+    assert (x1 || x2)
+    assert (x3 || x4)
+    assert (x11 || x4 || x5)
+    assert ((not x14) || x11)
+    assert (x1 || x2 || x3 || x4 || x5 || x6 || x7 || x8 || (not x9) || x10 || x11)
+    return ()
+  
+  result <- approxmc problem [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  
+  case result of
+    Count n -> 
+      putStrLn $ "Approximate count: " ++ show n ++ " solutions"
+    CountUnsolved -> 
+      putStrLn "Could not count solutions"
+    _ -> 
+      putStrLn $ "Unexpected result: " ++ show result
+
 main :: IO ()
 main = do
   results <- mapM runTest testCases
@@ -100,6 +140,7 @@ main = do
   putStrLn "\n====================================="
   putStrLn $ "Results: " ++ show passed ++ "/" ++ show total ++ " tests passed"
   putStrLn "====================================="
+  approxmcInterfaceTest
   
   if passed == total
     then exitSuccess
