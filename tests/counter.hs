@@ -34,7 +34,6 @@ runTest (input, expected) = do
 
 main :: IO ()
 main = do
-  putStrLn "Running parseCounter tests..."
   results <- mapM runTest testCases
   let passed = length (filter id results)
       total = length results
