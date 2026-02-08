@@ -127,8 +127,6 @@ approxmcInterfaceTest = do
       putStrLn $ "Approximate count: " ++ show n ++ " solutions"
     CountUnsolved -> 
       putStrLn "Could not count solutions"
-    _ -> 
-      putStrLn $ "Unexpected result: " ++ show result
 
 main :: IO ()
 main = do
