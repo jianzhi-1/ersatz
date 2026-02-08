@@ -208,6 +208,7 @@ library
     Ersatz.Counting
     Ersatz.Relation
     Ersatz.Counter.Common
+    Ersatz.Counter.ApproxMC
 
   other-modules:
     Ersatz.Internal.Parser

@@ -8,18 +8,18 @@ import Control.Monad.IO.Class
 import Ersatz.Counter.Common (parseCounter)
 import Ersatz.Solver.Common (withTempFiles)
 import Ersatz.Problem ( SAT, writeDimacs', writeProjectionSet )
-import Ersatz.Solution
+import Ersatz.Solution (Counter, CountResult)
 import System.Process (readProcessWithExitCode)
 
 -- | `Counter` for `SAT` problems that tries to invoke the @approxmc@ executable from the @PATH@
-approxmc :: MonadIO m => [Int] -> Counter SAT m
+approxmc :: MonadIO m => Counter SAT m
 approxmc = approxmcPath "approxmc"
 
 -- | `Counter` for `SAT` problems that tries to invoke a program that takes @approxmc@ compatible arguments.
 --
 -- The 'FilePath' refers to the path to the executable.
-approxmcPath :: MonadIO m => FilePath -> [Int] -> Counter SAT m
-approxmcPath path projectionVars problem = liftIO $ do
+approxmcPath :: MonadIO m => FilePath -> Counter SAT m
+approxmcPath path problem projectionVars = liftIO $ do
   withTempFiles ".cnf" "" $ \problemPath _ -> do
     writeDimacs' problemPath problem
     writeProjectionSet problemPath projectionVars

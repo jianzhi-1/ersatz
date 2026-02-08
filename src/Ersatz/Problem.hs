@@ -41,6 +41,7 @@ module Ersatz.Problem
   , dimacs, qdimacs, wdimacs
   , writeDimacs, writeQdimacs, writeWdimacs
   , writeDimacs', writeQdimacs', writeWdimacs'
+  , writeProjectionSet
   ) where
 
 import Data.ByteString.Builder

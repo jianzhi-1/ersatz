@@ -12,6 +12,7 @@ module Ersatz.Solution
   , Result(..)
   , Solver
   , CountResult(..)
+  , Counter
   ) where
 
 import Control.Lens
