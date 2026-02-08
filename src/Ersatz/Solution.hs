@@ -11,6 +11,7 @@ module Ersatz.Solution
   ( Solution(..), solutionFrom
   , Result(..)
   , Solver
+  , CountResult(..)
   ) where
 
 import Control.Lens
@@ -70,7 +71,7 @@ instance Bounded Result where
 type Solver s m = s -> m (Result, IntMap Bool)
 
 data CountResult
-  = Unsolved
+  = CountUnsolved
   | Count Integer
   deriving (Eq, Ord, Show, Read)
 

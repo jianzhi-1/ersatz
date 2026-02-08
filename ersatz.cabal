@@ -207,6 +207,7 @@ library
     Ersatz.Variable
     Ersatz.Counting
     Ersatz.Relation
+    Ersatz.Counter.Common
 
   other-modules:
     Ersatz.Internal.Parser

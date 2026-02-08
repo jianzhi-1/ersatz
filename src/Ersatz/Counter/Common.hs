@@ -4,16 +4,17 @@ module Ersatz.Counter.Common
 
 import Control.Monad.IO.Class
 import Ersatz.Solution
+import Text.Read (readMaybe)
 
 parseCounter :: String -> CountResult
 parseCounter txt =
     case [n | ('s':' ':rest) <- lines txt
             , Just n <- [parseMc rest]] of
       (n:_) -> Count n
-      []    -> Unsolved
+      []    -> CountUnsolved
   where
     parseMc :: String -> Maybe Integer
     parseMc line =
       case words line of
-        ("mc":num:_) -> Just (read num)
+        ("mc":num:_) -> readMaybe num
         _            -> Nothing
