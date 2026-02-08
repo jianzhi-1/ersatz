@@ -19,10 +19,10 @@ approxmc = approxmcPath "approxmc"
 --
 -- The 'FilePath' refers to the path to the executable.
 approxmcPath :: MonadIO m => FilePath -> Counter SAT m
-approxmcPath path problem projectionVars = liftIO $ do
+approxmcPath path problem projectionSet = liftIO $ do
   withTempFiles ".cnf" "" $ \problemPath _ -> do
     writeDimacs' problemPath problem
-    writeProjectionSet problemPath projectionVars
+    writeProjectionSet problemPath projectionSet
     
     (_exit, out, _err) <-
       readProcessWithExitCode path [problemPath] []
