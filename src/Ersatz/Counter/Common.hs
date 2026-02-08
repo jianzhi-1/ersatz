@@ -2,7 +2,6 @@ module Ersatz.Counter.Common
   ( parseCounter
   ) where
 
-import Control.Monad.IO.Class
 import Ersatz.Solution
 import Text.Read (readMaybe)
 
