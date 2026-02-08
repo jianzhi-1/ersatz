@@ -103,7 +103,6 @@ jobs:
           apt-get install -y unzip
       - name: Install ApproxMC
         run: |
-          set -euxo pipefail
           VERSION=4.2.0
           ASSET=approxmc-linux-amd64.zip
           curl -L -o approxmc.zip "https://github.com/meelgroup/approxmc/releases/download/release/${VERSION}/${ASSET}"
